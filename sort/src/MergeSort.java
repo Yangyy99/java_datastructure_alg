@@ -5,39 +5,37 @@ public class MergeSort {
 
   public static void main(String[] args) {
     //
-    int[] arr = {1, 4, 7, 8, 3, 6,};
-    sort(arr,0,arr.length-1);
+    int[] arr = {
+      1, 4, 7, 8, 3, 6
+    };
+    sort(arr, 0, arr.length - 1);
     System.out.println(Arrays.toString(arr));
-
-
   }
 
-    /***
-     * 归并排序
-     * @param arr
-     * @param leftBound 左边界
-     * @param rightBound 有边界
-     */
-  public static void sort(int[] arr,int leftBound,int rightBound) {
+  /**
+   * * 归并排序
+   *
+   * @param arr
+   * @param leftBound 左边界
+   * @param rightBound 有边界
+   */
+  public static void sort(int[] arr, int leftBound, int rightBound) {
 
-      //只有一个元素
-      if (leftBound==rightBound){
-          return;
-      }
-      if (leftBound>rightBound||leftBound<0||rightBound<0){
-          throw new RuntimeException("边界异常");
-      }
-      // 中间分开
-      int mid=leftBound+(rightBound-leftBound)/2;
-
-      // 左边排序
-      sort(arr,leftBound,mid);
-
-      // 右边排序
-      sort(arr,mid+1,rightBound);
-      // 合并,
-      merge(arr,leftBound,mid+1,rightBound);
-
+    // 只有一个元素
+    if (leftBound == rightBound) {
+      return;
+    }
+    if (leftBound > rightBound || leftBound < 0 || rightBound < 0) {
+      throw new RuntimeException("边界异常");
+    }
+    // 中间分开
+    int mid = leftBound + (rightBound - leftBound) / 2;
+    // 左边排序
+    sort(arr, leftBound, mid);
+    // 右边排序
+    sort(arr, mid + 1, rightBound);
+    // 合并,
+    merge(arr, leftBound, mid + 1, rightBound);
   }
 
   /**
@@ -66,7 +64,7 @@ public class MergeSort {
     while (j <= rightBound) temp[k++] = arr[j++];
 
     for (int m = 0; m < temp.length; m++) {
-      arr[leftPtr+ m] = temp[m];
+      arr[leftPtr + m] = temp[m];
     }
   }
 }

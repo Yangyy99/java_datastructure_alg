@@ -16,8 +16,11 @@ public class QuickSort {
     if (leftBound >= rightBound) {
       return;
     }
+    //先分区
     int mid = partition(array, leftBound, rightBound);
+    // 排序左边
     quickSort(array, leftBound, mid - 1);
+    // 排序右边
     quickSort(array, mid + 1, rightBound);
   }
 
@@ -25,8 +28,8 @@ public class QuickSort {
    * 分区返回中轴位置
    *
    * @param array
-   * @param leftBound
-   * @param rightBound
+   * @param leftBound 分区左边界
+   * @param rightBound 分区有边界
    * @return 返回轴的位置
    */
   public static int partition(int[] array, int leftBound, int rightBound) {
