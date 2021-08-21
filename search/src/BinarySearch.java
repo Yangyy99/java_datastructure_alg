@@ -21,6 +21,9 @@ public class BinarySearch {
    */
   public static int bisearch(int[] array, int leftBound, int rightBound, int findVal) {
 
+    if (findVal < array[leftBound] || findVal > array[rightBound]) {
+      return -1;
+    }
     if (leftBound == rightBound) {
       return array[leftBound] == findVal ? leftBound : -1;
     }
@@ -41,10 +44,16 @@ public class BinarySearch {
    * * 通过非递归方式完成二分查找
    *
    * @param array
-   * @return
+   * @param leftBound 左边界
+   * @param rightBound 有边界
+   * @param findVal 索要查找的val
+   * @return 返回第一个位置所在的索引,查找不到则返回-1
    */
   public static int bisear(int[] array, int leftBound, int rightBound, int findVal) {
 
+    if (findVal < array[leftBound] || findVal > array[rightBound]) {
+      return -1;
+    }
     int left = leftBound;
     int right = rightBound;
 
