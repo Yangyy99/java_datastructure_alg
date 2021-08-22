@@ -29,7 +29,7 @@ public class BinarySearch {
     }
 
     /** 中间位置 */
-    int mid = leftBound + (rightBound - leftBound) / 2;
+    int mid = leftBound + (rightBound - leftBound) >> 1;
     if (findVal < array[mid]) {
       /** 往左递归 */
       return bisearch(array, leftBound, mid - 1, findVal);
@@ -57,7 +57,7 @@ public class BinarySearch {
     int left = leftBound;
     int right = rightBound;
 
-    int mid = left + (right - left) / 2;
+    int mid = left + (right - left) >> 1;
 
     while (left <= right) {
       // 如果大于 说明val在左边

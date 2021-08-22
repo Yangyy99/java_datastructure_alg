@@ -57,9 +57,9 @@ public class MergeSort {
     int j = rightPtr;
     int k = 0;
     while (i < rightPtr && j <= rightBound) {
-
       temp[k++] = arr[i] <= arr[j] ? arr[i++] : arr[j++];
     }
+   //其中有剩余左右
     while (i < rightPtr) temp[k++] = arr[i++];
     while (j <= rightBound) temp[k++] = arr[j++];
 
