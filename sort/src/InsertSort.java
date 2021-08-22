@@ -5,11 +5,18 @@ public class InsertSort {
 
   public static void main(String[] args) {
 
+    int[] arrays = {3, 9, -1, 10, 8, -2};
+    insertSort(arrays);
+    System.out.println(Arrays.toString(arrays));
+  }
+  /**
+   * 插入排序
+   * @param arrays 要排序的数组
+   */
+  public static void insertSort(int[] arrays){
+
     int insertValue = 0;
     int insertIndex = 0;
-    //
-    int[] arrays = {3, 9, -1, 10, 8, -2};
-
     for (int i = 1; i < arrays.length; i++) {
       // 表示要插入的值
       insertValue = arrays[i];
@@ -24,6 +31,6 @@ public class InsertSort {
       // 插入元素
       arrays[insertIndex] = insertValue;
     }
-    System.out.println(Arrays.toString(arrays));
+
   }
 }

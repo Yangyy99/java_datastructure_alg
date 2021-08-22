@@ -5,6 +5,11 @@ public class BubbleSort {
   public static void main(String[] args) {
     //
     int[] arrays = {3, 9, -1, 10, -2};
+    bubbleSort(arrays);
+    System.out.println(Arrays.toString(arrays));
+  }
+
+  public static void bubbleSort(int[] arrays){
     boolean flag = true;
     int temp = 0;
     for (int i = 0; i < arrays.length - 1; i++) {
@@ -26,6 +31,5 @@ public class BubbleSort {
         flag = true;
       }
     }
-    System.out.println(Arrays.toString(arrays));
   }
 }

@@ -5,7 +5,12 @@ public class SelectSort {
   public static void main(String[] args) {
     //
     int[] arrays = {3, 9, -1, 10, -2};
+    selectSort(arrays);
+    System.out.println(Arrays.toString(arrays));
+  }
 
+
+  public static void selectSort(int[] arrays){
     for (int i = 0; i < arrays.length; i++) {
       //
       int minIndex = i; // 最小数的索引，擂台法
@@ -23,6 +28,5 @@ public class SelectSort {
         arrays[minIndex] = temp;
       }
     }
-    System.out.println(Arrays.toString(arrays));
   }
 }
