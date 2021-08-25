@@ -1,6 +1,6 @@
 import java.util.Arrays;
 
-/** @Author: 云萧YYY @DateTime: 2021/08/22 @Description: 斐波那契查找算法 */
+/** @Author: 云萧YYY @DateTime: 2021/08/22 @Description: 斐波那契查找算法 ,需要在一个有序数组中*/
 public class FibonacciSearch {
 
   public static void main(String[] args) {
@@ -13,7 +13,7 @@ public class FibonacciSearch {
   /**
    * 非递归方式<br>
    * 关键在于寻找mid位置 通过斐波那契数列可以得到 F(k)-1=[F(k-1)-1]+1+[F(k-2)-1] 此时中间1位置就是我们需要的位置<br>
-   * 所以索引mid=leftBound +F（k-1）-1
+   * 所以索引mid=leftBound +F（k-1）-1 黄金分割点
    *
    * @param arr
    * @param findVal 查找的值
@@ -38,7 +38,7 @@ public class FibonacciSearch {
     }
     // 获取mid值
     while (left <= right) {
-
+      // 获取黄金分割点
       mid = left + fibonacci(k - 1) - 1;
       if (temp[mid] > findVal) {
         right = mid - 1;
@@ -59,7 +59,6 @@ public class FibonacciSearch {
     }
     return -1;
   }
-
   /**
    * 获取第n位斐波那契的数字
    *
