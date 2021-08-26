@@ -1,3 +1,7 @@
+package binarytree;
+
+import binarytree.BinaryTree;
+
 /** @Author: 云萧YYY @DateTime: 2021/08/24 @Description: 测试类 */
 public class Test {
   public static void main(String[] args) {

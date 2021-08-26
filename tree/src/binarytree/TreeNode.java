@@ -1,3 +1,5 @@
+package binarytree;
+
 /**
  * @Author: 云萧YYY
  * @DateTime: 2021/08/24
@@ -39,7 +41,7 @@ public class TreeNode {
 
     @Override
     public String toString() {
-        return "TreeNode{" +
+        return "binarytree.TreeNode{" +
                 "value=" + value +
                 '}';
     }

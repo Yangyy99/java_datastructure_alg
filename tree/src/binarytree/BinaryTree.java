@@ -1,3 +1,5 @@
+package binarytree;
+
 /** @Author: 云萧YYY @DateTime: 2021/08/24 @Description: 模拟树结构(int) */
 public class BinaryTree {
 
