@@ -1,6 +1,6 @@
 import java.util.Arrays;
 
-/** @Author: 云萧YYY @DateTime: 2021/08/27 @Description: 堆排序,大顶堆为升序，小顶堆为降序 */
+/** @Author: 云萧YYY @DateTime: 2021/08/27 @Description: 堆排序,大顶堆为升序，小顶堆为降序 ,运用了这个顺序二叉树的特点*/
 public class HeapSort {
 
   public static void main(String[] args) {
