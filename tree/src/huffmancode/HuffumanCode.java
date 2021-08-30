@@ -2,7 +2,7 @@ package huffmancode;
 
 import java.util.*;
 
-/** @Author: 云萧YYY @DateTime: 2021/08/29 @Description: TODO */
+/** @Author: 云萧YYY @DateTime: 2021/08/29 @Description: 生成霍夫曼编码表 , string通过霍夫曼压缩，对string进行编码和解码 */
 public class HuffumanCode {
 
   // 存放生成霍夫曼编码表
@@ -11,13 +11,151 @@ public class HuffumanCode {
   static StringBuilder stringBuilder = new StringBuilder();
 
   public static void main(String[] args) {
-    //
+
     String str = "i like like like java do you like a java";
-    byte[] bytes = str.getBytes();
-    Node huffmanTree = createHuffmanTree(getHuffmanNodes(bytes));
-    // preOrder(huffmanTree);
-    Map<Byte, String> huffmanCodes = getHuffmanCodes(huffmanTree);
-    System.out.println(huffmanCodes);
+    byte[] code = huffmanZipCode(str);
+    byte[] decode = decode(code, huffmancode);
+    System.out.println(new String(decode));
+  }
+
+  /**
+   * 将编码完的byte 解压
+   *
+   * @param bytes 压缩后的byte数组
+   * @param huffmancode 编码表
+   * @return
+   */
+  public static byte[] decode(byte[] bytes, Map<Byte, String> huffmancode) {
+    //
+    StringBuilder builder = new StringBuilder();
+    ArrayList<Byte> list = new ArrayList<>();
+    for (int i = 0; i < bytes.length - 2; i++) {
+      builder.append(byteToBitString(bytes[i], true));
+    }
+    // 有效编码的最后一个不足八位的s
+    String s = byteToBitString(bytes[bytes.length - 2], false);
+    // 编码完最后一位是0的个数
+    int count = bytes[bytes.length - 1];
+    while (count-- > 0) {
+      // 最后一位补0 因为integer 生成二进制String 可能会丢失字符 比如1 ->01  001  0001  0001....
+      builder.append("0");
+    }
+    builder.append(s);
+
+    // 反转编码表 由编码-字符
+    Map<String, Byte> decodedMap = new HashMap<>();
+    for (Map.Entry<Byte, String> entry : huffmancode.entrySet()) {
+      decodedMap.put(entry.getValue(), entry.getKey());
+    }
+    for (int i = 0; i < builder.length(); ) {
+      // 小型计数
+      int counter = 1;
+      String code = null;
+      // 编码
+      while (true) {
+        code = builder.substring(i, i + counter);
+        if (decodedMap.containsKey(code)) {
+          list.add(decodedMap.get(code));
+          break;
+        }
+        counter++;
+      }
+      i += counter;
+    }
+
+    byte[] decodedBytes = new byte[list.size()];
+    for (int i = 0; i < list.size(); i++) {
+      decodedBytes[i] = list.get(i);
+    }
+    return decodedBytes;
+  }
+
+  /**
+   * 将压缩编码完的byte 还原成二进制组成的字符串
+   *
+   * @param b 解码的字节数
+   * @param flag 这个byte数值 是否按照八位编码的
+   * @return
+   */
+  private static String byteToBitString(byte b, boolean flag) {
+    int temp = b;
+    // 如果flag为true，说明是以八位编码的，所以我们要补码，补后八位
+    if (flag) {
+      temp |= 256;
+    }
+    String s = Integer.toBinaryString(temp);
+    return flag ? s.substring(s.length() - 8) : s;
+  }
+
+  /**
+   * 通过传入的string 获取根据霍夫曼树编码压缩后的byte数组
+   *
+   * @param content
+   * @return
+   */
+  public static byte[] huffmanZipCode(String content) {
+
+    if (content == null || content.length() < 1) {
+      throw new RuntimeException("string 不能为空");
+    }
+    // 根据字符串获取byte[]数组
+    byte[] contentBytes = content.getBytes();
+    // 生成霍夫曼树编码
+    Map<Byte, String> huffmanCodes =
+        getHuffmanCodes(createHuffmanTree(getHuffmanNodes(contentBytes)));
+    // 生成压缩后的byte数组
+    return zipCode(contentBytes, huffmanCodes);
+  }
+
+  /**
+   * 通过霍夫曼编码表，将一个String生成的byte[] 压缩
+   *
+   * @param bytes 原string 的byte数组
+   * @param huffmancode
+   * @return
+   */
+  public static byte[] zipCode(byte[] bytes, Map<Byte, String> huffmancode) {
+
+    if (bytes == null || bytes.length < 1 || huffmancode == null) {
+      throw new RuntimeException("参数异常");
+    }
+
+    StringBuilder builder = new StringBuilder();
+    // 循环byte数组，将数组元素进行编码，->String
+    for (byte b : bytes) {
+      builder.append(huffmancode.get(b));
+    }
+    //    System.out.println(builder.length());
+    // 将string（0100...二进制）按照八位一组转化成byte数组（压缩）
+    // 计算分组长度
+    int len = (builder.length() + 7) / 8;
+    byte[] zipcode = new byte[len + 1];
+    // 纪录当前数组位置
+    int index = 0;
+    // 纪录最后一个字节0的个数0010 还是010?... 为了解码
+    int zereCount = 0;
+    // 按照八位步长进行切片
+    for (int i = 0; i < builder.length(); i += 8) {
+      // 按照八位一组 i+8可能string 越界
+      String code = (i + 8) > builder.length() ? builder.substring(i) : builder.substring(i, i + 8);
+      // 最后一位不足八位，纪录最后0的个数
+      if (i + 8 > builder.length() && builder.length() - 1 - i > 1) {
+        String s = builder.substring(i);
+        for (int k = 0; k < s.length(); k++) {
+          //
+          if (s.charAt(k) == '0') {
+            zereCount++;
+          }
+          if (s.charAt(k) == '1') {
+            break;
+          }
+        }
+      }
+      zipcode[index] = (byte) Integer.parseInt(code, 2);
+      index++;
+    }
+    zipcode[zipcode.length - 1] = (byte) zereCount;
+    return zipcode;
   }
 
   /**
@@ -62,7 +200,6 @@ public class HuffumanCode {
       getHuffmanCodes(node.getRight(), "1", builder);
     } else {
       // 叶子结点
-
       huffmancode.put(node.getCh(), builder.toString());
     }
   }
