@@ -1,8 +1,9 @@
 package huffmancode;
 
+import java.io.*;
 import java.util.*;
 
-/** @Author: 云萧YYY @DateTime: 2021/08/29 @Description: 生成霍夫曼编码表 , string通过霍夫曼压缩，对string进行编码和解码 */
+/** @Author: 云萧YYY @DateTime: 2021/08/29 @Description: 生成霍夫曼编码表 , string通过霍夫曼压缩，对string进行编码和解码 以字节的单位处理，所以可以编码一切文件 */
 public class HuffumanCode {
 
   // 存放生成霍夫曼编码表
@@ -13,9 +14,82 @@ public class HuffumanCode {
   public static void main(String[] args) {
 
     String str = "i like like like java do you like a java";
-    byte[] code = huffmanZipCode(str);
-    byte[] decode = decode(code, huffmancode);
-    System.out.println(new String(decode));
+    //    byte[] code = huffmanZipCode(str);
+    //    byte[] decode = decode(code, huffmancode);
+    //    System.out.println(new String(decode));
+    String srcFile = "D:\\test\\App.ico";
+    String zipFile = "D:\\test\\dst.zip";
+    String dstFile = "D:\\test\\app.zip";
+     zipFile(srcFile,dstFile);
+    //unZipFile(zipFile, dstFile);
+    System.out.println("压缩完成");
+  }
+
+  public static void unZipFile(String zipFile, String dstFile) {
+
+    BufferedInputStream fis = null;
+    ObjectInputStream ois = null;
+    BufferedOutputStream bos = null;
+
+    try {
+      fis = new BufferedInputStream(new FileInputStream(zipFile));
+      ois = new ObjectInputStream(fis);
+      byte[] fileCode = (byte[]) ois.readObject();
+      Map<Byte, String> huffmanCode = (Map<Byte, String>) ois.readObject();
+      byte[] bytes = decode(fileCode, huffmanCode);
+      bos = new BufferedOutputStream(new FileOutputStream(dstFile));
+      bos.write(bytes);
+      bos.flush();
+    }  catch (IOException e) {
+      e.printStackTrace();
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        bos.close();
+        ois.close();
+        fis.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+  }
+  /**
+   * 将文件压缩
+   *
+   * @param srcFile 源文件路径
+   * @param dstFile 目标文件路径
+   */
+  public static void zipFile(String srcFile, String dstFile) {
+
+    BufferedInputStream bis = null;
+    BufferedOutputStream bos = null;
+    ObjectOutputStream oos = null;
+
+    try {
+      bis = new BufferedInputStream(new FileInputStream(srcFile));
+      byte[] bytes = new byte[bis.available()];
+      bis.read(bytes);
+      // 编码
+      byte[] zipCode = huffmanZipCode(bytes);
+      bos = new BufferedOutputStream(new FileOutputStream(dstFile));
+      oos = new ObjectOutputStream(bos);
+      // 写入压缩后的byte数组
+      oos.writeObject(zipCode);
+      // 写入编码表
+      oos.writeObject(huffmancode);
+      oos.flush();
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+    } finally {
+      try {
+        oos.close();
+        bos.close();
+        bis.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
   }
 
   /**
@@ -26,13 +100,13 @@ public class HuffumanCode {
    * @return
    */
   public static byte[] decode(byte[] bytes, Map<Byte, String> huffmancode) {
-    //
+
     StringBuilder builder = new StringBuilder();
     ArrayList<Byte> list = new ArrayList<>();
     for (int i = 0; i < bytes.length - 2; i++) {
       builder.append(byteToBitString(bytes[i], true));
     }
-    // 有效编码的最后一个不足八位的s
+    // 有效编码的最后一个不足八位的bitString
     String s = byteToBitString(bytes[bytes.length - 2], false);
     // 编码完最后一位是0的个数
     int count = bytes[bytes.length - 1];
@@ -41,14 +115,13 @@ public class HuffumanCode {
       builder.append("0");
     }
     builder.append(s);
-
     // 反转编码表 由编码-字符
     Map<String, Byte> decodedMap = new HashMap<>();
     for (Map.Entry<Byte, String> entry : huffmancode.entrySet()) {
       decodedMap.put(entry.getValue(), entry.getKey());
     }
     for (int i = 0; i < builder.length(); ) {
-      // 小型计数
+      // 小型计数，字符串匹配使用
       int counter = 1;
       String code = null;
       // 编码
@@ -62,7 +135,6 @@ public class HuffumanCode {
       }
       i += counter;
     }
-
     byte[] decodedBytes = new byte[list.size()];
     for (int i = 0; i < list.size(); i++) {
       decodedBytes[i] = list.get(i);
@@ -107,6 +179,15 @@ public class HuffumanCode {
     return zipCode(contentBytes, huffmanCodes);
   }
 
+  public static byte[] huffmanZipCode(byte[] bytes) {
+    if (bytes == null || bytes.length < 1) {
+      throw new RuntimeException("数组不能为空");
+    }
+    // 生成霍夫曼树编码
+    Map<Byte, String> huffmanCodes = getHuffmanCodes(createHuffmanTree(getHuffmanNodes(bytes)));
+    return zipCode(bytes, huffmanCodes);
+  }
+
   /**
    * 通过霍夫曼编码表，将一个String生成的byte[] 压缩
    *
@@ -142,7 +223,7 @@ public class HuffumanCode {
       if (i + 8 > builder.length() && builder.length() - 1 - i > 1) {
         String s = builder.substring(i);
         for (int k = 0; k < s.length(); k++) {
-          //
+
           if (s.charAt(k) == '0') {
             zereCount++;
           }
@@ -151,6 +232,7 @@ public class HuffumanCode {
           }
         }
       }
+      // 0010 010 ->2 注意
       zipcode[index] = (byte) Integer.parseInt(code, 2);
       index++;
     }
