@@ -1,17 +1,17 @@
-package binarytree;
+package bstree;
 
 /**
  * @Author: 云萧YYY
  * @DateTime: 2021/08/24
  * @Description: 树的结点
  */
-public class TreeNode {
+public class Node {
 
      private int value;
-     private TreeNode left;
-     private TreeNode right;
+     private Node left;
+     private Node right;
 
-     public TreeNode(int value){
+     public Node(int value){
          this.value=value;
      }
 
@@ -23,19 +23,19 @@ public class TreeNode {
         this.value = value;
     }
 
-    public TreeNode getLeft() {
+    public Node getLeft() {
         return left;
     }
 
-    public void setLeft(TreeNode left) {
+    public void setLeft(Node left) {
         this.left = left;
     }
 
-    public TreeNode getRight() {
+    public Node getRight() {
         return right;
     }
 
-    public void setRight(TreeNode right) {
+    public void setRight(Node right) {
         this.right = right;
     }
 
