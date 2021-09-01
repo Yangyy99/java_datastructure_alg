@@ -1,54 +1,98 @@
-package bstree;
-/**
- * @Author: 云萧YYY @DateTime: 2021/08/24 <br>
- * @Description: 二叉排序树 ，查找快，对数据的增加删除也快，对内存的要求也不高，结合了数组和链表的优点<br>
- * @Description: BST 将比树根结点小的放入左边 ，大的放在右边
- */
-public class BinarySortTree {
+package avltree;
+
+/** @Author: 云萧YYY @DateTime: 2021/09/01 @Description: 自平衡二叉排序树 */
+public class AVLTree {
 
   private Node root;
 
-  public BinarySortTree(int value) {
+  public AVLTree(int value) {
     root = new Node(value);
   }
 
-  public BinarySortTree() {}
+  public AVLTree() {}
   //
   public void add(int value) {
 
     if (root == null) {
       root = new Node(value);
+      return;
     }
     add(value, root);
   }
   /**
-   * 二叉树的添加方法
+   * AVL平衡树，添加时候需要自旋 找平衡
    *
    * @param value
    * @param node
    */
   private void add(int value, Node node) {
 
-    if (value == node.getValue()) {
-      return;
-    }
     if (value < node.getValue()) {
-      if (node.getLeft() == null) {
-        Node Node = new Node(value);
-        node.setLeft(Node);
-        return;
-      } else {
+      if (node.getLeft() != null) {
         add(value, node.getLeft());
+      } else {
+        node.setLeft(new Node(value));
+      }
+    } else if (value > node.getValue()) {
+      if (node.getRight() != null) {
+        add(value, node.getRight());
+      } else {
+        node.setRight(new Node(value));
       }
     } else {
-      if (node.getRight() == null) {
-        Node Node = new Node(value);
-        node.setRight(Node);
-        return;
-      } else {
-        add(value, node.getRight());
-      }
+      return;
     }
+    // 放入结点之后 查看左右子树是否平衡,不平衡要旋转
+    if (depthTree(root.getRight()) - depthTree(root.getLeft()) > 1) {
+      // 如果右边高度-左边高度>1那么说明 需要左旋
+      leftRotate();
+    }
+  }
+
+  /** 左旋转 左边树比较低 */
+  private void leftRotate() {
+
+    // 创建一个新的结点存储根节点值
+    Node newNode = new Node(root.getValue());
+    // 如果根结点的右子树有左子树那么将左子树放入新节点右边
+    if (root.getRight().getLeft() != null) {
+      newNode.setRight(root.getRight().getLeft());
+    }
+    newNode.setLeft(root.getLeft().getRight());
+    root.setValue(root.getRight().getValue());
+    root.setRight(root.getRight().getRight());
+    // 放入结点
+    root.getLeft().setRight(newNode);
+  }
+
+  /** * 右旋转 右边树层次低 */
+  private void rightRotate() {
+
+    Node newNode = new Node(root.getValue());
+    if (root.getLeft().getRight() != null) {
+      newNode.setLeft(root.getLeft().getRight());
+    }
+    // 将右边结点的左子树 放入新节点的右边
+    newNode.setRight(root.getRight().getLeft());
+    root.setValue(root.getLeft().getValue());
+    root.setLeft(root.getLeft().getLeft());
+    // 将新节点放入根节点右子树左边
+    root.getRight().setLeft(newNode);
+  }
+  /**
+   * 递归树的深度
+   *
+   * @return
+   */
+  public int depthTree(Node node) {
+    if (node == null) {
+      return 0;
+    }
+    // 返回左右子树中最深的深度
+    return Math.max(
+            node.getLeft() != null ? depthTree(node.getLeft()) : 0,
+            node.getRight() != null ? depthTree(node.getRight()) : 0)
+        + 1;
   }
 
   /**
