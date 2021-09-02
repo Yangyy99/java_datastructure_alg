@@ -42,42 +42,85 @@ public class AVLTree {
     } else {
       return;
     }
-    // 放入结点之后 查看左右子树是否平衡,不平衡要旋转
-    if (depthTree(root.getRight()) - depthTree(root.getLeft()) > 1) {
-      // 如果右边高度-左边高度>1那么说明 需要左旋
-      leftRotate();
-    }
+    // 将树平衡
+    // 放入结点之后 查看左右子树是否平衡,不平衡要旋转,左旋转
+    //    if (depthTree(root.getRight()) - depthTree(root.getLeft()) > 1) {
+    //      // 如果根节点右子树下不平衡 先要通过旋转使得子树平衡 才能在通过根节点旋转 使得整个树平衡
+    //      if (root.getRight() != null
+    //          && depthTree(root.getRight().getLeft()) > depthTree(root.getRight().getRight())) {
+    //        rightRotate(root.getRight());
+    //      }
+    //      // 跟结点左旋转 降低右子树高度
+    //      leftRotate(root);
+    //    }
+    //    // 右旋转
+    //    if (depthTree(root.getLeft()) - depthTree(root.getRight()) > 1) {
+    //      // 如果根节点的左子树不平衡 那么先要平衡左子树 ，在平衡根节点
+    //      if (root.getLeft() != null
+    //          && depthTree(root.getLeft().getRight()) > depthTree(root.getLeft().getLeft())) {
+    //        leftRotate(root.getLeft());
+    //      }
+    //      rightRotate(root);
+    //    }
+    avl(root);
   }
 
-  /** 左旋转 左边树比较低 */
-  private void leftRotate() {
+  /**
+   * 左旋转 左边树比较低
+   *
+   * @param node 要旋转的结点
+   */
+  private void leftRotate(Node node) {
 
-    // 创建一个新的结点存储根节点值
-    Node newNode = new Node(root.getValue());
+    // 创建一个新的结点存储根节点值,目的将新节点代替根节点，放入新根结点的左边 保持平衡
+    Node newNode = new Node(node.getValue());
     // 如果根结点的右子树有左子树那么将左子树放入新节点右边
-    if (root.getRight().getLeft() != null) {
-      newNode.setRight(root.getRight().getLeft());
+    if (node.getRight().getLeft() != null) {
+      newNode.setRight(node.getRight().getLeft());
     }
-    newNode.setLeft(root.getLeft().getRight());
-    root.setValue(root.getRight().getValue());
-    root.setRight(root.getRight().getRight());
-    // 放入结点
-    root.getLeft().setRight(newNode);
+    newNode.setLeft(node.getLeft());
+    node.setValue(node.getRight().getValue());
+    node.setRight(node.getRight().getRight());
+    node.setLeft(newNode);
   }
 
-  /** * 右旋转 右边树层次低 */
-  private void rightRotate() {
+  public void avl(Node node) {
 
-    Node newNode = new Node(root.getValue());
-    if (root.getLeft().getRight() != null) {
-      newNode.setLeft(root.getLeft().getRight());
+    if (node.getLeft() == null && node.getRight() == null) {
+      return;
     }
-    // 将右边结点的左子树 放入新节点的右边
-    newNode.setRight(root.getRight().getLeft());
-    root.setValue(root.getLeft().getValue());
-    root.setLeft(root.getLeft().getLeft());
-    // 将新节点放入根节点右子树左边
-    root.getRight().setLeft(newNode);
+
+    if (node.getLeft() != null) {
+      avl(node.getLeft());
+    }
+    if (node.getRight() != null) {
+      avl(node.getRight());
+    }
+    if (depthTree(node.getLeft()) - depthTree(node.getRight()) > 1) {
+      rightRotate(node);
+    }
+    if (depthTree(node.getRight()) - depthTree(node.getLeft()) > 1) {
+      leftRotate(node);
+    }
+  }
+
+  /**
+   * * 右旋转 右边树层次低
+   *
+   * @param node 要旋转的根节点
+   */
+  private void rightRotate(Node node) {
+
+    Node newNode = new Node(node.getValue());
+    if (node.getLeft().getRight() != null) {
+      newNode.setLeft(node.getLeft().getRight());
+    }
+    // 将根结点右子树放入新节点右子树 ，因为这个新结点代替原来根节点
+    newNode.setRight(node.getRight());
+    // 存放值
+    node.setValue(node.getLeft().getValue());
+    node.setLeft(node.getLeft().getLeft());
+    node.setRight(newNode);
   }
   /**
    * 递归树的深度
@@ -132,12 +175,14 @@ public class AVLTree {
       }
     } else if (node.getLeft() != null && node.getRight() != null) {
       // 删除的结点左右都含有结点
-      // 需要右子树中最小的结点
-      temp = searchMinNode(node.getLeft());
+      // 需要右子树中最小的结点的父节点
+      temp = searchMinParent(node);
+      //获取value
+      int minVal = temp.getLeft().getValue();
       // 把最小的结点删了
-      delete(temp.getValue());
+      temp.setLeft(null);
       // 将最小的结点数据修改要删除的位置即可
-      node.setValue(temp.getValue());
+      node.setValue(minVal);
     } else {
       // 判断要删除的该结点是父节点的左节点 还是右结点
       // flag = parentNode.getLeft() == node ? true : false;
@@ -150,6 +195,8 @@ public class AVLTree {
         parentNode.setRight(temp);
       }
     }
+    // 删除后维护树的平衡
+    avl(root);
   }
 
   /** 删除树根结点 */
@@ -166,6 +213,8 @@ public class AVLTree {
       // 树根下面只有一棵子树
       root = root.getLeft() == null ? root.getLeft() : root.getRight();
     }
+    //
+
   }
 
   /**
@@ -195,6 +244,22 @@ public class AVLTree {
       throw new NullPointerException("node 为空");
     }
     if (node.getLeft() == null) {
+      return node;
+    }
+    return searchMinNode(node.getLeft());
+  }
+
+  /**
+   *
+   *
+   * @param node
+   * @return
+   */
+  private Node searchMinParent(Node node) {
+    if (node == null) {
+      throw new NullPointerException("node 为空");
+    }
+    if (node.getLeft()!=null&&node.getLeft().getLeft() == null) {
       return node;
     }
     return searchMinNode(node.getLeft());
@@ -253,7 +318,7 @@ public class AVLTree {
     }
   }
 
-  /** 前序遍历 */
+  /** 中序遍历 */
   public void midOrder() {
     midOrder(root);
   }
@@ -266,5 +331,27 @@ public class AVLTree {
     midOrder(node.getLeft());
     System.out.print(node.getValue() + ",");
     midOrder(node.getRight());
+  }
+
+  //先序遍历
+  public void preOrder(){
+
+    preOrder(root);
+  }
+  private void preOrder(Node node){
+    if (node == null) {
+
+      return;
+    }
+    System.out.print(node.getValue() + ",");
+    preOrder(node.getLeft());
+    preOrder(node.getRight());
+
+  }
+
+
+
+  public Node getRoot() {
+    return root;
   }
 }
