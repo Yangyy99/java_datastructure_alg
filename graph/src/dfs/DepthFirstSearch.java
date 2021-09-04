@@ -1,6 +1,5 @@
 package dfs;
 
-import Adjacency.Nograph;
 import graph.Graph;
 
 import java.util.LinkedList;

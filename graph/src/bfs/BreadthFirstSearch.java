@@ -1,6 +1,5 @@
 package bfs;
 
-import Adjacency.Nograph;
 import graph.Graph;
 
 import java.util.ArrayDeque;
