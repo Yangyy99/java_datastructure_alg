@@ -68,7 +68,7 @@ public class BinarySearch {
       } else {
         return mid;
       }
-      mid = left + (right - left) / 2;
+      mid = left + (right - left) >> 1;
     }
     return -1;
   }
