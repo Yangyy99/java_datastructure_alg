@@ -6,10 +6,13 @@ public class QuickSort {
   public static void main(String[] args) {
     //
 
-    int[] arr = {3, 9, -1, 10, 21, -2};
-    quickSort(arr, 0, arr.length - 1);
+    int[] arr = {3, 9, -1, 10, 21, -2,-1,-9,-1};
+    //quickSort(arr, 0, arr.length - 1);
+    //partition(arr,0,arr.length-1);
+    int[] partition = partition(arr, -1);
+    System.out.println(Arrays.toString(partition));
     System.out.println(Arrays.toString(arr));
-    Arrays.sort(arr);
+   // Arrays.sort(arr);
   }
 
   public static void quickSort(int[] array, int leftBound, int rightBound) {
@@ -62,5 +65,31 @@ public class QuickSort {
     int temp = array[l];
     array[l] = array[r];
     array[r] = temp;
+  }
+
+  /**
+   * 荷兰国旗问题 lgn
+   * @param arr
+   * @return
+   */
+  public static int[] partition(int[] arr,int val){
+
+    int left=0;
+    int right=arr.length-1;
+    int current=0;
+    while(current<right){
+
+      if (arr[current]<val){
+        swap(arr,current++,left++);
+      }
+      if (arr[current]>val){
+        swap(arr,current,right--);
+      }
+      if (arr[current]==val){
+        current++;
+      }
+
+    }
+ return new int[]{left,right-1};
   }
 }
