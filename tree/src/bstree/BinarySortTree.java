@@ -223,4 +223,8 @@ public class BinarySortTree {
     System.out.print(node.getValue() + ",");
     midOrder(node.getRight());
   }
+
+  public Node getRoot() {
+    return root;
+  }
 }
