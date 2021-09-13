@@ -2,7 +2,7 @@ package kruskal;
 
 import java.util.Arrays;
 
-/** @Author: 云萧YYY @DateTime: 2021/09/13 @Description: TODO */
+/** @Author: 云萧YYY @DateTime: 2021/09/13 @Description: kruskal 算法  ，为了实现最小连通树，将图中所有的结点连通，最小的连通图  */
 public class KruskalCase {
 
   public static final int INT = Integer.MAX_VALUE;
@@ -145,6 +145,9 @@ class EData {
   }
 }
 
+/**
+ *图
+ */
 class MGraph {
 
   public int vertex;
