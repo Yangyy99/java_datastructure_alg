@@ -4,15 +4,14 @@ import java.util.Arrays;
 public class QuickSort {
 
   public static void main(String[] args) {
-    //
 
     int[] arr = {3, 9, -1, 10, 21, -2,-1,-9,-1};
-    //quickSort(arr, 0, arr.length - 1);
-    //partition(arr,0,arr.length-1);
-    int[] partition = partition(arr, -1);
-    System.out.println(Arrays.toString(partition));
-    System.out.println(Arrays.toString(arr));
-   // Arrays.sort(arr);
+    // quickSort(arr, 0, arr.length - 1);
+
+    //    int[] partition = partition(arr, -1);
+    //    System.out.println(Arrays.toString(partition));
+    //    System.out.println(Arrays.toString(arr));
+    // Arrays.sort(arr);
   }
 
   public static void quickSort(int[] array, int leftBound, int rightBound) {

@@ -36,10 +36,12 @@ public class LinkListTest {
     System.out.println("合并之前:");
     singleLinkList.list();
     System.out.println("================");
-    singleLinkList1.list();
-    System.out.println("合并之后");
-    SingleLinkList linkList = mergeLinkedList(singleLinkList1.getHead(), singleLinkList.getHead());
-    linkList.list();
+//    singleLinkList1.list();
+//    System.out.println("合并之后");
+//    SingleLinkList linkList = mergeLinkedList(singleLinkList1.getHead(), singleLinkList.getHead());
+    //linkList.list();
+    singleLinkList.reverse(singleLinkList.getHead());
+    singleLinkList.list();
   }
 
   /**
