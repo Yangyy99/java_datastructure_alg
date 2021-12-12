@@ -166,6 +166,31 @@ public class SingleLinkList {
   }
 
   /**
+   * 反转链表
+   * @return
+   */
+  public HeroNode reverse(HeroNode head){
+
+    HeroNode temp=head.next;
+    Stack<HeroNode> stack=new Stack<>();
+    while(temp!=null){
+      stack.push(
+              temp
+      );
+      temp=temp.next;
+    }
+    temp=head;
+    while(!stack.isEmpty()){
+      temp.next=stack.pop();
+      temp=temp.next;
+    }
+    temp.next=null;
+    return head;
+  }
+
+
+
+  /**
    * * 从末尾到头打印单链表 百度面试题 反转打印单链表 要求方式： 1.反向遍历 不建议 通过反转单链表进行 遍历 破坏原数据结构 2 . stack 堆栈方式 推荐 逆序考虑stack
    * 数据结构
    */
