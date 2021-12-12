@@ -24,6 +24,8 @@ public class PolishExpression {
 //    List<String> list = getListByExpression(suffixExpression);
 //    int calculate = calculate(list);
 //    System.out.println(calculate);
+    ArrayList a=new ArrayList();
+    a.add(1);
   }
 
   public static List<String> getListByExpression(String suffixExpression) {
