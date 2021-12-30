@@ -66,6 +66,5 @@ public class MergeArray {
         while (index2 >= 0) {
             nums1[pointer--] = nums2[index2--];
         }
-
     }
 }
