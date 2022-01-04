@@ -3,7 +3,8 @@ package code.mergeArray
 /**
  * @Author: 云萧YYY
  * @DateTime: 2022/01/03
- * @Description: 存在一个按升序排列的链表，给你这个链表的头节点 head ，请你删除所有重复的元素，使每个元素 只出现一次
+ * @Description: leetcode 83
+ * 存在一个按升序排列的链表，给你这个链表的头节点 head ，请你删除所有重复的元素，使每个元素 只出现一次
  */
 fun main() {
     //[1,1,2]
