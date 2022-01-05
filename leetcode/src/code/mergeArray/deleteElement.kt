@@ -9,7 +9,8 @@ package code.mergeArray
 fun main() {
     //[1,1,2]
     val head: ListNode = ListNode(1, ListNode(1, ListNode(1, ListNode(2, null))));
-    println(deleteDuplicates(head))
+    //println(deleteDuplicates(head))
+    //  println(reserve(head))
 }
 
 /**
@@ -46,3 +47,5 @@ fun deleteDuplicatesRecursion(head: ListNode?): ListNode? {
     head.next = deleteDuplicatesRecursion(head.next);
     return null;
 }
+
+
