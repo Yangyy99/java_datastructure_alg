@@ -2,10 +2,10 @@ package code.mergeArray
 
 /**
  * @Author: 云萧YYY
- * @DateTime: 2021/12/29
+ * @DateTime: 2022/01/06
  * @Description: TODO
  */
-class ListNode(var `val`:Int,var next: ListNode?) {
+class ListNode(var `val`: Int, var next: ListNode?) {
     override fun toString(): String {
         return "`val`=$`val`, next=$next"
     }
