@@ -1,6 +1,7 @@
 package code.movezero;
 
 import java.util.Arrays;
+import java.util.function.Predicate;
 
 /**
  * @Author: 云萧YYY
@@ -11,11 +12,12 @@ public class MoveZero {
     public static void main(String[] args) {
 
         int[] nums = {1, 0, 0, 3, 4, 0};
-        moveZeroes(nums);
+        // 移动符合条件的元素，移动出数组 ，或者或删除满足条件的元素
+        moveZeroes(nums, i -> i == 0);
         System.out.println(Arrays.toString(nums));
     }
 
-    public static void moveZeroes(int[] nums) {
+    public static void moveZeroes(int[] nums, Predicate<Integer> predicate) {
 
         if (nums == null || nums.length < 1) {
             return;
@@ -23,7 +25,8 @@ public class MoveZero {
         //offset 纪录非零元素个数,其实这样就想当于纪录一个偏移量,
         int offset = 0;
         for (int i = 0; i < nums.length; i++) {
-            if (nums[i] != 0) {
+            //这里的条件不一定是移动零
+            if (!predicate.test(nums[i])) {
                 // 将非零元素往前移动,占据零的位置,offset != i 说明 i要移动的元素,移动完毕置零
                 if (offset != i) {
                     //此时 offset 指向0的位置
