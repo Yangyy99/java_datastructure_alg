@@ -1,4 +1,4 @@
-package code.stackorqueue
+package code.stack
 
 import java.util.*
 import kotlin.text.StringBuilder
@@ -37,10 +37,13 @@ fun decodeString(s: String): String {
                 str.append(stack.pop())
             }
             stack.pop()
+            // 拼接要复制的字符串
             while (stack.isNotEmpty() && stack.peek().matches(Regex("\\d"))) {
                 value += stack.pop()
             }
+            // 矫正顺序
             value = value.reversed()
+            // 拼接 复制次数
             if (value.length > 1) value = value.run {
                 this.substring(0, this.length - 1)
             }
@@ -50,6 +53,7 @@ fun decodeString(s: String): String {
         } else
             stack.push(it.toString())
     }
+    //
     while (stack.isNotEmpty()) {
         str.append(stack.pop())
     }

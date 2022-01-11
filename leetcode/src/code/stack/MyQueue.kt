@@ -1,4 +1,4 @@
-package code.stackorqueue
+package code.stack
 
 import java.util.*
 
