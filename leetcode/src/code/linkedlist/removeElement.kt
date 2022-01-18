@@ -17,19 +17,19 @@ fun main() {
 }
 
 /**
- * kotlin 语言存在问题
+ *
  */
 fun removeElements(head: ListNode?, `val`: Int): ListNode? {
 
     if (head == null) head
     val result = ListNode(0, head)
-    var pre = result
-    while (pre.next != null) {
+    var pre: ListNode? = result
+    while (pre?.next != null) {
         //remove
         if (pre.next?.`val` == `val`) {
             pre.next = pre.next?.next
         }
-        pre = pre.next!!
+        pre = pre.next
 
     }
     return result.next
