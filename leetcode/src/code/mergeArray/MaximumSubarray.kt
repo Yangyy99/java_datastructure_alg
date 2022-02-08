@@ -14,6 +14,17 @@ fun main() {
 
 }
 
+/***
+ * Dynamic Programing
+ * 动态规划
+ */
+fun maxSubArray2(nums: IntArray): Int {
+
+    var max = 0
+
+    return 0
+}
+
 /**
  * 分治法
  */
@@ -36,7 +47,7 @@ fun getMaxSubArray(nums: IntArray, left: Int, right: Int): Int {
 }
 
 /**
- * left --> right 的value
+ * left --> right的value
  */
 fun getCrossArray(nums: IntArray, left: Int, right: Int): Int {
     if (left == right) return nums[left]
@@ -51,15 +62,15 @@ fun getCrossArray(nums: IntArray, left: Int, right: Int): Int {
     //同理右面
     var rightSum = nums[mid + 1]
     var rightMax = rightSum
-    for (j in mid + 1..right) {
+    for (j in mid + 2..right) {
         rightSum += nums[j]
         rightMax = max(rightMax, rightSum)
     }
-    return max(rightMax, leftMax)
+    return rightMax + leftMax
 }
 
 /***
- * merge
+ * merge 分而治之 治
  */
 fun mergeSubArray(leftVal: Int, rigthVal: Int, sumMiddum: Int): Int {
     return max(leftVal, max(sumMiddum, rigthVal))
