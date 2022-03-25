@@ -10,19 +10,29 @@ package code.mergeArray
 fun main() {
 
     val array = intArrayOf(-2, 1, -3, 4, -1, 2, 1, -5, 4)
-    maxSubArray(array).also(::println)
+    maxSubArray2(array).also(::println)
 
 }
 
 /***
  * Dynamic Programing
  * 动态规划
+ *
+ *  三要素
  */
 fun maxSubArray2(nums: IntArray): Int {
 
-    var max = 0
 
-    return 0
+    var max = 0
+    var subMax = nums[0];
+    nums.forEach {
+        //  对于每一个元素当前的最大子序列和 要么是当前元素 ,要么为当前元素 加上上一个元素的最大子序列和
+        if (max + it >= it) max += it
+        else max = it
+        // 擂台法比较出最大的
+        if (max > subMax) subMax = max
+    }
+    return subMax
 }
 
 /**
