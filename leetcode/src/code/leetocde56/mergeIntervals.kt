@@ -25,6 +25,34 @@ fun main() {
 }
 
 /**
+ * 优化空间复杂度
+ */
+fun merge2(intervals: Array<IntArray>): Array<IntArray> {
+
+    if (intervals.size < 2) return intervals
+
+    val result = Array<IntArray>(intervals.size + 1) {
+        intArrayOf()
+    }
+    Arrays.sort(intervals) { o1, o2 -> o1[0] - o2[0] };
+
+    var index = 0
+    result[index++] = intArrayOf(intervals[0][0], intervals[0][1])
+
+    for (i in 1 until intervals.size) {
+        /**
+         * 直接插入 两个区间不会重合
+         */
+        if (result[index - 1][1] < intervals[i][0]) result[index++] = intArrayOf(intervals[i][0], intervals[i][1])
+
+        if (result[index - 1][1] >= intervals[i][0] && intervals[i][1] > result[index - 1][1]) result[index - 1][1] =
+            intervals[i][1]
+    }
+
+    return result.copyOfRange(0, index)
+}
+
+/**
  *  根据区间的特点 右区间大于左区间 那么需要合并,这样内存超出限制 （）
  */
 fun merge(intervals: Array<IntArray>): Array<IntArray> {
